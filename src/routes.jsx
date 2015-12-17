@@ -150,7 +150,7 @@ function getSubreddit(ctx) {
 function userData(ctx, app) {
   let { apiOptions } = ctx.props;
 
-  if (ctx.token) {
+  if (ctx.props.token) {
     let userOptions =  Object.assign({}, apiOptions, {
       user: 'me',
     });
@@ -167,7 +167,15 @@ function userData(ctx, app) {
         limit: 250,
       },
     });
-    subOptions.headers['user-agent'] = ctx.headers['user-agent'];
+
+    let userAgent;
+    if (ctx.headers) {
+      userAgent = ctx.headers['user-agent'];
+    } else if (apiOptions.headers) {
+      userAgent = apiOptions.headers['user-agent'];
+    }
+
+    subOptions.headers['user-agent'] = userAgent;
     setData(ctx, 'userSubscriptions', 'subreddits', subOptions);
 
   } else {
@@ -199,7 +207,7 @@ function makeBody() {
     });
 
     return (
-      <BodyLayout { ...props } key='layout'>
+      <BodyLayout { ...props }>
         { content }
       </BodyLayout>
     );
@@ -736,3 +744,4 @@ function routes(app) {
 
 export default routes;
 export var buildProps = buildProps;
+export var userData = userData;

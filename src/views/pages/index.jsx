@@ -8,6 +8,7 @@ import ListingPaginationButtons from '../components/ListingPaginationButtons';
 import Loading from '../components/Loading';
 import TopSubnav from '../components/TopSubnav';
 import Interstitial from '../components/Interstitial';
+import CommunityHeader from '../components/CommunityHeader';
 
 class IndexPage extends BasePage {
   constructor(props) {
@@ -122,9 +123,12 @@ class IndexPage extends BasePage {
       <div>
         { loading }
 
+        <CommunityHeader {...props} subreddit={ data.subreddit } />
+
         <TopSubnav
           { ...props }
-          user={ this.state.data.user }
+          user={ data.user }
+          subreddit={ data.subreddit }
           sort={ sort }
           list='listings'
           excludedSorts={ excludedSorts }

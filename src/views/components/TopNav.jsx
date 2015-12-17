@@ -1,129 +1,74 @@
 import React from 'react';
 import constants from '../../constants';
-import { models } from 'snoode';
+import propTypes from '../../propTypes';
 
 import BaseComponent from './BaseComponent';
 import Logo from '../components/icons/Logo';
 import SeashellsDropdown from '../components/SeashellsDropdown';
 import SnooIcon from '../components/icons/SnooIcon';
 
+const UserMenuButton = 'userMenuButton';
+const CommunityMenuButton = 'communityMenuButton';
+
 class TopNav extends BaseComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      subreddit: null,
-      loaded: true,
-      sideNavOpen: false,
+      communityMenuOpen: false,
+      userMenuOpen: false,
     };
 
-    this._onToggle = this._onToggle.bind(this);
-    this._onSubscribeClick = this._onSubscribeClick.bind(this);
-    this._onClick = this._onClick.bind(this, 'hamburger');
-  }
 
-  loadSubreddit(data) {
-    this.setState({
-      loaded: false,
-    });
-
-    data.then(function(data) {
-      this.setState({
-        subreddit: data,
-        loaded: true,
-      });
-    }.bind(this));
-  }
-
-  componentWillReceiveProps(nextProps) {
-    var {data, subredditName} = nextProps;
-    var subPromise = data.get('subreddit');
-
-    if (subredditName && subPromise && subredditName !== this.props.subredditName) {
-      this.loadSubreddit(subPromise);
-    } else if (!subredditName && this.state.subreddit) {
-      this.setState({
-        subreddit: null,
-      });
-    }
+    this._onUserMenuToggle = this._onUserMenuToggle.bind(this);
+    this._onCommunityMenuToggle = this._onCommunityMenuToggle.bind(this);
+    this._topNavHamubrgerClick = this._onClick.bind(this, UserMenuButton);
+    this._topNavCommunityButtonClick = this._onClick.bind(this, CommunityMenuButton);
   }
 
   componentDidMount() {
-    var {app, data, subredditName} = this.props;
-    var subPromise = data.get('subreddit');
-    if (subredditName && subPromise) {
-      this.loadSubreddit(subPromise);
-    }
-
-    app.on(constants.SIDE_NAV_TOGGLE, this._onToggle);
+    this.props.app.on(constants.USER_MENU_TOGGLE, this._onUserMenuToggle);
+    this.props.app.on(constants.COMMUNITY_MENU_TOGGLE, this._onCommunityMenuToggle);
   }
 
   componentWillUnmount() {
-    this.props.app.off(constants.SIDE_NAV_TOGGLE, this._onToggle);
+    this.props.app.off(constants.USER_MENU_TOGGLE, this._onUserMenuToggle);
+    this.props.app.off(constants.COMMUNITY_MENU_TOGGLE, this._onCommunityMenuToggle);
   }
 
   render() {
-    var props = this.props;
-    var title = props.subredditName || props.multi || props.userName;
-    var link = props.topNavLink;
-    var {subreddit} = this.state;
-    var currentSub = '';
-
-    if (props.subredditName) {
-      currentSub = '/r/' + props.subredditName;
-    }
+    const props = this.props;
+    const { sideNavOpen, communityMenuOpen } = this.state;
+    let title = props.userName;
+    let link = props.topNavLink;
 
     if (!title) {
       link = '/';
       title = <Logo />;
     }
 
-    var subredditMenu;
-
-    if (subreddit) {
-      var isSubscribed = subreddit.user_is_subscriber;
-      var subscribedClass = isSubscribed ? 'saved' : '';
-
-      subredditMenu = (
-        <SeashellsDropdown right={ true } app={ props.app }>
-          <li className='Dropdown-li'>
-            <a className='MobileButton Dropdown-button' href={ `/r/${props.subredditName}/about` }>
-              <span className='icon-info-circled'> </span>
-              <span className='Dropdown-text'>{ `About ${props.subredditName}` }</span>
-            </a>
-          </li>
-          <li className='Dropdown-li'>
-            <a
-              className='MobileButton Dropdown-button'
-              href={ `${props.config.reddit}/r/${props.subredditName}/wiki` }
-              data-no-route='true'
-            >
-              <span className='icon-text-circled' > </span>
-              <span className='Dropdown-text'>Wiki</span>
-            </a>
-          </li>
-          <li className={ `Dropdown-li ${props.token ? '' : 'hidden'}` }>
-            <button className='Mobilebutton Dropdown-button' onClick={ this._onSubscribeClick }>
-              <span className={ 'icon-save-circled ' + subscribedClass }> </span>
-              <span className='Dropdown-text'>
-                { isSubscribed ? 'Unsubscribe' : 'Subscribe' }
-              </span>
-            </button>
-          </li>
-        </SeashellsDropdown>
-      );
+    let currentSubredditPath = '';
+    if (props.subredditName) {
+      currentSubredditPath = `/r/${props.subredditName}`
     }
 
     let notificationsCount;
     if (props.user && props.user.inbox_count) {
       notificationsCount = (
-        <span className='badge badge-xs badge-orangered'>{ props.user.inbox_count }</span>
+        <span className='badge badge-xs badge-orangered badge-right'>
+          { props.user.inbox_count }
+        </span>
       );
     }
 
-    var sideNavIcon = 'icon-hamburger';
-    if (this.state.sideNavOpen) {
-      sideNavIcon = 'icon-x';
+    let sideNavIcon = 'icon-menu icon-large';
+    if (sideNavOpen) {
+      sideNavIcon += ' blue';
+    }
+
+    let communityMenuIcon = 'icon-nav-arrowdown';
+    if (communityMenuOpen) {
+      communityMenuIcon = 'icon-nav-arrowup blue';
     }
 
     return (
@@ -134,27 +79,35 @@ class TopNav extends BaseComponent {
             <SnooIcon rainbow={ false }/>
           </a>
           <h1 className='TopNav-text TopNav-padding'>
-            <span>
-              <a className='TopNav-a' href={ link }>
+            <span className='TopNav-text-vcentering'>
+              <a className='TopNav-a' href={link}>
                 { title }
               </a>
             </span>
+            <button
+              className='MobileButton community-button'
+              onClick={ this._topNavCommunityButtonClick }
+            >
+              <span className={ communityMenuIcon }>{' '}</span>
+            </button>
           </h1>
         </div>
         <div className='TopNav-padding TopNav-right' key='topnav-actions'>
-          { subredditMenu }
-          <a className='MobileButton TopNav-floaty' href={ `${currentSub}/submit` }>
-            <span className='icon-post'>{ ' ' }</span>
+          <a
+            className='MobileButton TopNav-floaty'
+            href={ `${currentSubredditPath}/submit` }
+          >
+            <span className='icon-post_edit icon-large' />
           </a>
           <a
             className='MobileButton TopNav-floaty'
-            href={ (props.subredditName ? `/r/${props.subredditName}` : '') + '/search' }
+            href={ `${currentSubredditPath}/search` }
           >
-            <span className='icon-search'></span>
+            <span className='icon-search icon-large'></span>
           </a>
           <button
             className='MobileButton TopNav-floaty'
-            onClick={ this._onClick }
+            onClick={ this._topNavHamubrgerClick }
           >
             <span className={ sideNavIcon }></span>
             { notificationsCount }
@@ -164,62 +117,29 @@ class TopNav extends BaseComponent {
    );
   }
 
-  _onSubscribeClick() {
-    var state = this.state;
-
-    if (state.subreddit) {
-      var props = this.props;
-
-      var subscription = new models.Subscription({
-        action: state.subreddit.user_is_subscriber ? 'unsub' : 'sub',
-        sr: state.subreddit.name,
-      });
-
-      var options = Object.assign({}, this.props.apiOptions, {
-        model: subscription,
-      });
-
-      this.setState({
-        subreddit: Object.assign({}, state.subreddit, {
-          user_is_subscriber: !state.subreddit.user_is_subscriber,
-        }),
-      });
-
-      // and send request to the server to do actual work
-      props.app.api.subscriptions.post(options)
-        .then(function (data) {
-          // if it fails revert back to the original state
-          if (Object.keys(data).length) {
-            this.setState({
-              subreddit: Object.assign(state.subreddit, {
-                user_is_subscriber: !state.subreddit.user_is_subscriber,
-              }),
-            });
-
-            this.props.app.render('/400', false);
-          }
-        }.bind(this));
-    }
-  }
-
   _onClick(str) {
     switch (str) {
-      case 'hamburger':
+      case UserMenuButton:
         this.props.app.emit(constants.TOP_NAV_HAMBURGER_CLICK);
+        break;
+      case CommunityMenuButton:
+        this.props.app.emit(constants.TOP_NAV_COMMUNITY_CLICK);
         break;
     }
   }
 
-  _onToggle(bool) {
-    this.setState({
-      sideNavOpen: bool,
-    });
+  _onUserMenuToggle(bool) {
+    this.setState({ sideNavOpen: bool });
+  }
+
+  _onCommunityMenuToggle(bool) {
+    this.setState({ communityMenuOpen: bool});
+  }
+
+  static propTypes = {
+    user: propTypes.user,
+    subredditName: React.PropTypes.string,
   }
 }
-
-TopNav.propTypes = {
-  multi: React.PropTypes.string,
-  subredditName: React.PropTypes.string,
-};
 
 export default TopNav;

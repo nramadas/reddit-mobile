@@ -1,21 +1,29 @@
 import React from 'react';
 
+import propTypes from '../../propTypes';
 import SortDropdown from '../components/SortDropdown';
 
 function TopSubnav (props) {
-  const { user } = props;
+  const { user, subreddit } = props;
+  let navLink;
 
-  if (user) {
-    var loginLink = (
-      <a className='TopSubnav-a' href={ '/u/' + user.name }>{ user.name }</a>
+  if (subreddit && !props.hideSort) {
+    navLink = (
+      <a className='TopSubnav-a' href={ `${subreddit.url}about` }>
+        About this community
+      </a>
     );
+  } else if (user) {
+    navLink = <a className='TopSubnav-a' href={ '/u/' + user.name }>{ user.name }</a>;
   } else {
-    loginLink = (
+    navLink = (
       <a
         className='TopSubnav-a'
         href={ props.app.config.loginPath }
         data-no-route='true'
-      >Log in / Register</a>
+      >
+        Log in / Register
+      </a>
     );
   }
 
@@ -36,7 +44,7 @@ function TopSubnav (props) {
   return (
     <div className='TopSubnav'>
       { sort }
-      <div className='pull-right'>{ loginLink }</div>
+      <div className='pull-right'>{ navLink }</div>
     </div>
   );
 }
@@ -46,6 +54,8 @@ TopSubnav.propTypes = {
   hideSort: React.PropTypes.bool,
   list: React.PropTypes.string,
   sort: React.PropTypes.string,
+  user: propTypes.user,
+  subreddit: propTypes.subreddit,
 };
 
 export default TopSubnav;

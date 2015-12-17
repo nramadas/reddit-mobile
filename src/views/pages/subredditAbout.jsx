@@ -1,6 +1,8 @@
 import React from 'react';
 import process from 'reddit-text-js';
 
+import formatNumber from '../../lib/formatNumber';
+
 import BasePage from './BasePage';
 import Loading from '../components/Loading';
 import TopSubnav from '../components/TopSubnav';
@@ -25,8 +27,8 @@ class SubredditAboutPage extends BasePage {
 
     htmlDump = [
       <ul className='subreddit-about-numbers' key='subreddit-about-numbers'>
-        <li>{ `${data.subscribers} readers` }</li>
-        <li>{ `${data.accounts_active} users here now` }</li>
+        <li>{ `${formatNumber(data.subscribers)} readers` }</li>
+        <li>{ `${formatNumber(data.accounts_active)} users here now` }</li>
       </ul>,
       <div
         className='subreddit-about-rules'

@@ -448,6 +448,14 @@ function initialize(bindLinks) {
     cookies.set(message.key, 'globalMessageSeen', options);
   });
 
+  app.on(constants.OVERLAY_MENU_OPEN, function(open) {
+    if (open) {
+      $body.classList.add('OverlayMenu-visible');
+    } else {
+      $body.classList.remove('OverlayMenu-visible');
+    }
+  });
+
   function closeDropdowns() {
     // close any opened dropdown by faking another dropdown opening
     app.emit(constants.DROPDOWN_OPEN);
