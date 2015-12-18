@@ -37,6 +37,8 @@ class CommunityOverlayMenu extends BaseComponent {
                 href={ subreddit.url }
                 icon='OverlayMenu-icon-following-snoo'
                 text={ subreddit.display_name }
+                iconURL={ subreddit.icon_img }
+                iconBackgroundColor={ subreddit.key_color }
               />
             ); }) }
         </ExpandoRow>

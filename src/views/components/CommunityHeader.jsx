@@ -36,6 +36,35 @@ class CommunityHeader extends BaseComponent {
     );
   }
 
+  renderBannerRow(subreddit) {
+    const iconUrl = subreddit.icon_img;
+
+    let iconStyle = {};
+    let iconClass = ['CommunityHeader-banner-icon-holder'];
+
+    if (iconUrl) {
+      iconStyle.backgroundImage = `url(${iconUrl})`;
+      iconClass.push('CommunityHeader-banner-icon-holder-image');
+    }
+
+    let bannerStyle = {};
+    let bannerClass = ['CommunityHeader-banner'];
+
+    if (subreddit.key_color) {
+      bannerStyle.backgroundColor = subreddit.key_color;
+    }
+
+    if (subreddit.banner_image) {
+      bannerStyle.backgroundImage = `url(${subreddit.banner_image})`;
+    }
+
+    return (
+      <div className={ bannerClass.join(' ') } style={ bannerStyle }>
+        <div className={ iconClass.join(' ') } style={ iconStyle } />
+      </div>
+    );
+  }
+
   render() {
     if (!this.state.subreddit) {
       return false;
@@ -52,17 +81,18 @@ class CommunityHeader extends BaseComponent {
     const followIcon = subscriber ? 'icon-clear' : 'icon-follow';
     const errorMessageOrFalse = this.renderErrorMessage(error);
 
+    const banner = this.renderBannerRow(subreddit);
+
     return (
       <div className={ `CommunityHeader ${ error ? 'with-error' : '' }` }>
-        <div className='CommunityHeader-banner'>
-          <div className='CommunityHeader-banner-icon-holder' />
-        </div>
+        { banner }
+
         <div className='CommunityHeader-text-row'>
           <h4 className='CommunityHeader-community-title'>
             { subreddit.display_name }
           </h4>
-
         </div>
+
         <div className='CommunityHeader-text-row'>
           <span>{ `${formatNumber(subreddit.subscribers)} followers` }</span>
           { onlineCount }

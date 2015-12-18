@@ -10,9 +10,23 @@ function iconOrSpacerFromProps(props) {
   let iconContent;
 
   if (props.iconURL) {
-    iconContent = <img className='OverlayMenu-icon' src={ props.iconURL } />;
+    let backgroundStyle = {
+      backgroundImage: `url(${props.iconURL})`,
+    };
+
+    iconContent = (
+      <span
+        className='OverlayMenu-icon OverlayMenu-icon-img'
+        style={ backgroundStyle }
+      />);
   } else if (props.icon) {
-    iconContent = <span className={ `OverlayMenu-icon ${props.icon}` } />;
+    let iconStyles = {};
+
+    if (props.iconBackgroundColor) {
+      iconStyles.backgroundColor = props.iconBackgroundColor;
+    }
+
+    iconContent = <span className={ `OverlayMenu-icon ${props.icon}` } style={ iconStyles } />;
   }
 
   return (<span className='OverlayMenu-row-spacer'>{ iconContent }</span>);
