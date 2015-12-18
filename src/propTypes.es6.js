@@ -19,41 +19,41 @@ var _listingVariants = shape({
   }),
 });
 
-var _subreddit  = shape({
-    id: string,
-    name: string,
-    display_name: string,
-    subscribers: number,
-    accounts_active: number,
-    lang: string,
-    over18: bool,
+const _subreddit  = shape({
+  id: string,
+  name: string,
+  display_name: string,
+  subscribers: number,
+  accounts_active: number,
+  lang: string,
+  over18: bool,
 
-    banner_img: string,
-    banner_size: shape({
-      width: number.isRequired,
-      height: number.isRequired,
-    }),
+  banner_img: string,
+  banner_size: shape({
+    width: number.isRequired,
+    height: number.isRequired,
+  }),
 
-    user_is_banned: bool,
-    user_is_contributor: bool,
-    user_is_subscriber: bool,
-    user_is_moderator: bool,
-    submit_text: string,
-    submission_type: string,
+  user_is_banned: bool,
+  user_is_contributor: bool,
+  user_is_subscriber: bool,
+  user_is_moderator: bool,
+  submit_text: string,
+  submission_type: string,
 
-    collapse_deleted_comments: bool,
-    comment_score_hide_mins: number,
-    community_rules: arrayOf(shape({})),
-    hide_ads: bool,
-    icon_img: string,
-    icon_size: arrayOf(shape({})),
-    key_color: string,
+  collapse_deleted_comments: bool,
+  comment_score_hide_mins: number,
+  community_rules: arrayOf(shape({})),
+  hide_ads: bool,
+  icon_img: string,
+  icon_size: arrayOf(shape({})),
+  key_color: string,
 
-    public_description: string,
-    public_traffic: bool,
-    quarantine: bool,
-    related_subreddits: arrayOf(_subreddit)
-  });
+  public_description: string,
+  public_traffic: bool,
+  quarantine: bool,
+  related_subreddits: arrayOf(_subreddit),
+});
 
 export default {
 
@@ -154,5 +154,5 @@ export default {
     name: string.isRequired,
   }),
 
-  subreddit: _subreddit
+  subreddit: _subreddit,
 };

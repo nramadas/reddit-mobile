@@ -1,7 +1,6 @@
 import React from 'react';
 
 import constants from '../../constants';
-import propTypes from '../../propTypes';
 import BaseComponent from './BaseComponent';
 
 class OverlayMenu extends BaseComponent {
@@ -12,11 +11,10 @@ class OverlayMenu extends BaseComponent {
 
     this.state = {
       opened: false,
-    }
+    };
 
     this._close = this._close.bind(this);
     this._toggle = this._toggle.bind(this);
-    this._onScroll = this._onScroll.bind(this);
   }
 
   componentDidMount() {
@@ -58,15 +56,6 @@ class OverlayMenu extends BaseComponent {
     }
   }
 
-  _onScroll(evt) {
-    document.body.scrollTop = this._top;
-  }
-
-  /* For subclasses return a React.Props.node */
-  body() {
-    return (<div />);
-  }
-
   render() {
     if (this.state.opened) {
       return (
@@ -82,7 +71,7 @@ class OverlayMenu extends BaseComponent {
 
   static propTypes = {
     openedOnEventName: React.PropTypes.string.isRequired,
-    firesEventName: React.PropTypes.string
+    firesEventName: React.PropTypes.string,
   }
 }
 

@@ -23,10 +23,21 @@ class CommunitySearchRow extends BaseComponent {
       <li className='OverlayMenu-row bottom bottom-border'>
         <form className='OverlayMenu-form' method='GET' action='/goto' onSubmit={ this._goto }>
           <div className='OverlayMenu-form-input-group'>
-            <label className='OverlayMenu-form-label r-label'
-                  htmlFor='location-input'>r/</label>
-            <input type='text' ref='location' className='OverlayMenu-form-input' id='location-input'
-              placeholder='find a community' name='location' onChange={ this._handleInputChange } />
+            <label
+              className='OverlayMenu-form-label r-label'
+              htmlFor='location-input'
+            >
+              r/
+            </label>
+            <input
+              type='text'
+              ref='location'
+              className='OverlayMenu-form-input'
+              id='location-input'
+              placeholder='find a community'
+              name='location'
+              onChange={ this._handleInputChange }
+            />
             <span className='OverlayMenu-form-button right-arrow'>
               <button type='submit' className={ navArrowClassName }></button>
             </span>
@@ -44,7 +55,7 @@ class CommunitySearchRow extends BaseComponent {
     this.props.app.redirect(url);
   }
 
-  _handleInputChange(e) {
+  _handleInputChange() {
     const hasInput = !!this.refs.location.value.trim();
     this.setState({ hasInput });
   }

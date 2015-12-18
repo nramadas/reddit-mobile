@@ -30,6 +30,8 @@ class CommunityHeader extends BaseComponent {
       onlineCount = ` ${UTF8Circle} ${formatNumber(subreddit.accounts_active)} online`;
     }
 
+    const followIcon = subscriber ? 'icon-clear' : 'icon-follow' ;
+
     return (
       <div className='CommunityHeader'>
         <div className='CommunityHeader-banner'>
@@ -44,14 +46,16 @@ class CommunityHeader extends BaseComponent {
         <div className='CommunityHeader-text-row'>
           <span>{ `${formatNumber(subreddit.subscribers)} followers` }</span>
           { onlineCount }
-          { ` ${UTF8Circle}`}
+          { ` ${UTF8Circle}` }
           <span className='CommunityHeader-text-row-blue'>
             { ` ${subscriber ? 'Unfollow' : 'Follow'} ` }
             <button
               className='CommunityHeader-subscribe-button'
               onClick={ this._onSubscribeToggle }
             >
-              <span className={`CommunityHeader-subscribe-icon blue ${subscriber ? 'icon-clear' : 'icon-follow'}`} />
+              <span
+                className={ `CommunityHeader-subscribe-icon blue ${ followIcon}` }
+              />
             </button>
           </span>
         </div>
@@ -100,8 +104,8 @@ class CommunityHeader extends BaseComponent {
   }
 
   static propTypes = {
-    subreddit: propTypes.subreddit
+    subreddit: propTypes.subreddit,
   }
 }
 
-export default CommunityHeader
+export default CommunityHeader;

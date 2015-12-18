@@ -4,7 +4,6 @@ import propTypes from '../../propTypes';
 
 import BaseComponent from './BaseComponent';
 import Logo from '../components/icons/Logo';
-import SeashellsDropdown from '../components/SeashellsDropdown';
 import SnooIcon from '../components/icons/SnooIcon';
 
 const UserMenuButton = 'userMenuButton';
@@ -49,7 +48,7 @@ class TopNav extends BaseComponent {
 
     let currentSubredditPath = '';
     if (props.subredditName) {
-      currentSubredditPath = `/r/${props.subredditName}`
+      currentSubredditPath = `/r/${props.subredditName}`;
     }
 
     let notificationsCount;
@@ -80,7 +79,7 @@ class TopNav extends BaseComponent {
           </a>
           <h1 className='TopNav-text TopNav-padding'>
             <span className='TopNav-text-vcentering'>
-              <a className='TopNav-a' href={link}>
+              <a className='TopNav-a' href={ link }>
                 { title }
               </a>
             </span>
@@ -88,7 +87,7 @@ class TopNav extends BaseComponent {
               className='MobileButton community-button'
               onClick={ this._topNavCommunityButtonClick }
             >
-              <span className={ communityMenuIcon }>{' '}</span>
+              <span className={ communityMenuIcon } />
             </button>
           </h1>
         </div>

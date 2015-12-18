@@ -1,13 +1,11 @@
 import React from 'react';
-import cookies from 'cookies-js';
 
 import constants from '../../constants';
 import propTypes from '../../propTypes';
-import querystring from 'querystring';
 
 import BaseComponent from './BaseComponent';
 import OverlayMenu from './OverlayMenu';
-import { LinkRow, ButtonRow, ExpandoRow } from './OverlayMenuRow';
+import { LinkRow, ExpandoRow } from './OverlayMenuRow';
 import CommunitySearchRow from './CommunitySearchRow';
 
 class CommunityOverlayMenu extends BaseComponent {
@@ -30,15 +28,17 @@ class CommunityOverlayMenu extends BaseComponent {
         <ExpandoRow
           icon={ 'icon-settings' }
           text={ 'Following' }
-          subtext={ this.numCommunitiesText(subscriptions) }>
-           { subscriptions.map( (subreddit) => {
+          subtext={ this.numCommunitiesText(subscriptions) }
+        >
+          { subscriptions.map((subreddit) => {
             return (
               <LinkRow
-                key={`OverlayMenu-row-subscription-${subreddit.url}`}
+                key={ `OverlayMenu-row-subscription-${subreddit.url}` }
                 href={ subreddit.url }
                 icon='OverlayMenu-icon-following-snoo'
-                text={ subreddit.display_name } />
-            )})}
+                text={ subreddit.display_name }
+              />
+            ); }) }
         </ExpandoRow>
       );
     }
@@ -51,7 +51,7 @@ class CommunityOverlayMenu extends BaseComponent {
       >
         <CommunitySearchRow app={ app }/>
         <LinkRow
-          text={ `${user ? 'My ' :''}Front Page`}
+          text={ `${user ? 'My ' :''}Front Page` }
           href='/'
           icon='icon-snoo-circled icon-xl orangered'
         />
@@ -67,7 +67,7 @@ class CommunityOverlayMenu extends BaseComponent {
 
   static propTypes = {
     user: propTypes.user,
-    subscriptions: propTypes.subscriptions
+    subscriptions: propTypes.subscriptions,
   }
 }
 

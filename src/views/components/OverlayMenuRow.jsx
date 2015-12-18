@@ -1,9 +1,6 @@
 import React from 'react';
 
-import constants from '../../constants';
-import propTypes from '../../propTypes';
 import BaseComponent from './BaseComponent';
-
 
 function iconOrSpacerFromProps(props) {
   if (props.subtext) {
@@ -104,7 +101,7 @@ class ExpandoRow extends BaseComponent {
     if (props.subtext) {
       rowText = (
         <span className='OverlayMenu-row-text with-subtext'>
-          { props.text}
+          { props.text }
           <br />
           <span className='OverlayMenu-row-text subtext'>{ props.subtext }</span>
         </span>
@@ -118,8 +115,8 @@ class ExpandoRow extends BaseComponent {
         <button type='button' className='OverlayMenu-row-button' onClick={ this._onClick }>
           { iconOrSpacerFromProps(props) }
           { rowText }
-          <span className={ 'OverlayMenu-row-right-item'}>
-            <span className={`${expanded ? 'icon-nav-arrowup' : 'icon-nav-arrowdown'}`} />
+          <span className={ 'OverlayMenu-row-right-item' }>
+            <span  className={ `${expanded ? 'icon-nav-arrowup' : 'icon-nav-arrowdown'}` } />
           </span>
         </button>
         { body }
@@ -131,7 +128,7 @@ class ExpandoRow extends BaseComponent {
     text: React.PropTypes.string.isRequired,
     subtext: React.PropTypes.string,
     icon: React.PropTypes.string,
-    iconURL: React.PropTypes.string
+    iconURL: React.PropTypes.string,
   }
 }
 

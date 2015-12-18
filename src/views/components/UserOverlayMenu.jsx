@@ -3,6 +3,7 @@ import cookies from 'cookies-js';
 
 import constants from '../../constants';
 import propTypes from '../../propTypes';
+import querystring from 'querystring';
 import BaseComponent from './BaseComponent';
 
 import titleCase from '../../lib/titleCase';
@@ -27,7 +28,6 @@ class UserOverlayMenu extends BaseComponent {
   loggedInUserRows(user) {
     const inboxCount = user.inbox_count;
     let badge;
-    let newMailClass;
 
     if (inboxCount) {
       badge = (
@@ -35,7 +35,6 @@ class UserOverlayMenu extends BaseComponent {
           { inboxCount }
         </span>
       );
-      newMailClass = 'text-orangered';
     }
 
     return [
@@ -52,7 +51,7 @@ class UserOverlayMenu extends BaseComponent {
 
       <LinkRow
         key='inbox'
-        text={['Inbox', badge]}
+        text={ ['Inbox', badge] }
         href='/message/inbox'
         icon={ 'icon-message icon-large orangered' }
       />,
@@ -81,51 +80,54 @@ class UserOverlayMenu extends BaseComponent {
     if (user) {
       userBasedRows = this.loggedInUserRows(user);
     } else {
-      userBasedRows =
-        <LinkRow noRoute={ true }
+      userBasedRows = (
+        <LinkRow
+          noRoute={ true }
           text={ 'Log in / sign up' }
           icon={ userIconClassName }
-          href={ this.props.app.config.loginPath } />;
+          href={ this.props.app.config.loginPath }
+        />);
     }
 
     return (
-      <OverlayMenu app={ this.props.app }
-          openedOnEventName={ constants.TOP_NAV_HAMBURGER_CLICK }
-          firesEventName={ constants.USER_MENU_TOGGLE } >
-
+      <OverlayMenu
+        app={ this.props.app }
+        openedOnEventName={ constants.TOP_NAV_HAMBURGER_CLICK }
+        firesEventName={ constants.USER_MENU_TOGGLE }
+      >
         { userBasedRows }
 
         <ButtonRow
           icon={ 'icon-compact icon-large blue' }
           text={ `${compact ? 'List' : 'Compact'} view` }
-          clickHandler={ this._viewPreferenceToggleClick } />
-
+          clickHandler={ this._viewPreferenceToggleClick }
+        />
         <LinkRow
           icon={ 'icon-desktop icon-large blue' }
-          text={ 'Desktop Site'}
+          text={ 'Desktop Site' }
           href={ `https://www.reddit.com${this.props.ctx.url}` }
-          clickHandler={ this._desktopSite }/>
-
+          clickHandler={ this._desktopSite }
+        />
         <ExpandoRow icon='icon-info icon-large' text='About Reddit'>
           { menuItems.aboutItems.map((item) => {
-              return (
+            return (
                 <LinkRow
                   href={ `${config.reddit}${item.url}` }
                   key = { item.url }
                   text={ titleCase(item.title) }
                 />);
-          })}
+          }) }
         </ExpandoRow>
 
         <ExpandoRow icon='icon-rules icon-large' text='Reddit Rules'>
           { menuItems.ruleItems.map((item) => {
-              return (
+            return (
                 <LinkRow
                   href={ `${config.reddit}${item.url}` }
                   key={ item.url }
                   text={ titleCase(item.title) }
-              />);
-          })}
+                />);
+          }) }
         </ExpandoRow>
       </OverlayMenu>
     );
