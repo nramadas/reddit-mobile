@@ -7,7 +7,7 @@ class OverlayMenu extends BaseComponent {
   constructor(props) {
     super(props);
 
-    this._top = 10; // from css
+    this._top = constants.OVERLAY_MENU_OFFSET;
 
     this.state = {
       opened: false,

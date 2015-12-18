@@ -7,6 +7,7 @@ export default {
   USER_DATA_CHANGED: 'userDataChanged',
   VOTE: 'vote',
   OVERLAY_MENU_OPEN: 'overlayMenuOpen',
+  OVERLAY_MENU_OFFSET: -10, // from css
   DROPDOWN_CSS_CLASS: 'Dropdown',
   DROPDOWN_OPEN: 'dropdownOpen',
   COMPACT_TOGGLE: 'compactToggle',
