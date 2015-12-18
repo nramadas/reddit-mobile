@@ -13,8 +13,27 @@ class CommunityHeader extends BaseComponent {
   constructor(props) {
     super(props);
 
+    this.state.error = false;
+
     this.state.subreddit = props.subreddit;
     this._onSubscribeToggle = this._onSubscribeToggle.bind(this);
+    this._removeErrorRow = this._removeErrorRow.bind(this);
+  }
+
+  renderErrorMessage(error) {
+    if (!error) {
+      return false;
+    }
+
+    return (
+      <div className='CommunityHeader-error row alert alert-danger alert-bar'>
+        There was a problem, please try again
+        <span
+          className='CommunityHeader-clear-error-icon icon-clear white'
+          onClick={ this._removeErrorRow }
+        />
+      </div>
+    );
   }
 
   render() {
@@ -22,7 +41,7 @@ class CommunityHeader extends BaseComponent {
       return false;
     }
 
-    const subreddit = this.state.subreddit;
+    const { subreddit, error } = this.state;
     const subscriber = subreddit.user_is_subscriber;
 
     let onlineCount;
@@ -30,10 +49,11 @@ class CommunityHeader extends BaseComponent {
       onlineCount = ` ${UTF8Circle} ${formatNumber(subreddit.accounts_active)} online`;
     }
 
-    const followIcon = subscriber ? 'icon-clear' : 'icon-follow' ;
+    const followIcon = subscriber ? 'icon-clear' : 'icon-follow';
+    const errorMessageOrFalse = this.renderErrorMessage(error);
 
     return (
-      <div className='CommunityHeader'>
+      <div className={ `CommunityHeader ${ error ? 'with-error' : '' }` }>
         <div className='CommunityHeader-banner'>
           <div className='CommunityHeader-banner-icon-holder' />
         </div>
@@ -59,13 +79,21 @@ class CommunityHeader extends BaseComponent {
             </button>
           </span>
         </div>
+        { errorMessageOrFalse }
       </div>
     );
   }
 
   _toggleSubredditSubscribedState() {
     const subreddit = this.state.subreddit;
-    this.setState({subreddit: {...subreddit, user_is_subscriber: !subreddit.user_is_subscriber}});
+    this.setState({ subreddit: {
+      ...subreddit,
+      user_is_subscriber: !subreddit.user_is_subscriber,
+    }});
+  }
+
+  _removeErrorRow() {
+    this.setState({ error: false });
   }
 
   _onSubscribeToggle() {
@@ -88,15 +116,16 @@ class CommunityHeader extends BaseComponent {
       id: subreddit.id,
     };
 
-    // toggle the ui for now while we post the request
+    // toggle the ui for now, including clearing the error, until we get a response
     this._toggleSubredditSubscribedState();
+    this.setState({ error: false });
 
     props.app.api.subscriptions.post(options)
       .then(function (data) {
         // if it fails revert back to the original state
         if (Object.keys(data).length) {
           this._toggleSubredditSubscribedState();
-          this.props.app.render('/400', false);
+          this.setState({ error: true });
         } else {
           this.props.app.emit(constants.USER_DATA_CHANGED);
         }

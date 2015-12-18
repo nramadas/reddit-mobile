@@ -1,12 +1,16 @@
 @community-icon-size: 64px;
 @community-icon-half-size: floor(@community-icon-size / 2);
 @community-subscribe-button-size: 19px;
-@spacer: @grid-size + floor(@grid-size / 2);
+@spacer: @grid-size + @half-grid-size;
 
 .CommunityHeader {
   background-color: @white;
   border-bottom: 1px solid @pale-grey;
   padding-bottom: @spacer;
+
+  &.with-error {
+    padding-bottom: 0;
+  }
 }
 
 .CommunityHeader-banner {
@@ -69,5 +73,18 @@
   [class*=" icon-"] {
     font-size: @community-subscribe-button-size;
     line-height: 0;
+  }
+}
+
+.CommunityHeader-error {
+  margin-bottom: 0px;
+  margin-top: @half-grid-size;
+}
+
+.CommunityHeader-clear-error-icon {
+  margin-left: @half-grid-size;
+
+  &[class*=" icon-"] {
+    vertical-align: text-bottom;
   }
 }
