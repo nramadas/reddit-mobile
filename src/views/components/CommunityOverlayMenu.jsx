@@ -9,6 +9,13 @@ import { LinkRow, ExpandoRow } from './OverlayMenuRow';
 import CommunitySearchRow from './CommunitySearchRow';
 
 class CommunityOverlayMenu extends BaseComponent {
+  constructor(props) {
+    super(props);
+
+    this.renderOverlayBody = this.renderOverlayBody.bind(this);
+  }
+
+
   numCommunitiesText(subscriptions) {
     const num = subscriptions.length;
     if (num > 1) {
@@ -19,13 +26,14 @@ class CommunityOverlayMenu extends BaseComponent {
     return 'No Communities';
   }
 
-  render() {
+  renderOverlayBody() {
     const { user, subscriptions, app } = this.props;
 
     let followingRow;
     if (subscriptions) {
       followingRow =  (
         <ExpandoRow
+          key='communities-row'
           icon={ 'icon-settings' }
           text={ 'Following' }
           subtext={ this.numCommunitiesText(subscriptions) }
@@ -45,27 +53,36 @@ class CommunityOverlayMenu extends BaseComponent {
       );
     }
 
+    return ([
+      <CommunitySearchRow app={ app } key='search-row' />,
+      <LinkRow
+        key='front-page-row'
+        text={ `${user ? 'My ' :''}Front Page` }
+        href='/'
+        icon='icon-snoo-circled icon-xl orangered'
+      />,
+      <LinkRow
+        key='all-link'
+        text='Popular'
+        href='/r/all'
+        icon='icon-bar-chart orangered-circled-xl'
+      />,
+      followingRow,
+    ]);
+  }
+
+  render() {
+    const { app } = this.props;
+
     return (
       <OverlayMenu
         app={ app }
         openedOnEventName={ constants.TOP_NAV_COMMUNITY_CLICK }
         firesEventName={ constants.COMMUNITY_MENU_TOGGLE }
-      >
-        <CommunitySearchRow app={ app }/>
-        <LinkRow
-          text={ `${user ? 'My ' :''}Front Page` }
-          href='/'
-          icon='icon-snoo-circled icon-xl orangered'
-        />
-        <LinkRow
-          text='Popular'
-          href='/r/all'
-          icon='icon-bar-chart orangered-circled-xl'
-        />
-        { followingRow }
-      </OverlayMenu>
-    );
+        renderChildren={ this.renderOverlayBody }
+      />);
   }
+
 
   static propTypes = {
     user: propTypes.user,

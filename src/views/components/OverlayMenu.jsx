@@ -59,9 +59,9 @@ class OverlayMenu extends BaseComponent {
   render() {
     if (this.state.opened) {
       return (
-        <nav className='OverlayMenu tween'>
-          <ul className='OverlayMenu-ul list-unstyled'>
-          { this.props.children }
+        <nav className='OverlayMenu tween' onClick={ this._closeIfClickedOut }>
+          <ul className='OverlayMenu-ul list-unstyled' onClick={ this._gobbleMenuClicks }>
+          { this.props.renderChildren() }
           </ul>
         </nav>
       );
@@ -72,6 +72,7 @@ class OverlayMenu extends BaseComponent {
   static propTypes = {
     openedOnEventName: React.PropTypes.string.isRequired,
     firesEventName: React.PropTypes.string,
+    renderChildren: React.PropTypes.func.isRequired,
   }
 }
 

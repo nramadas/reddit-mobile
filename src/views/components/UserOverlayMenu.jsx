@@ -23,6 +23,7 @@ class UserOverlayMenu extends BaseComponent {
 
     this._viewPreferenceToggleClick = this._viewPreferenceToggleClick.bind(this);
     this._gotoDesktopSiteClick = this._gotoDesktopSiteClick.bind(this);
+    this.renderOverlayBody = this.renderOverlayBody.bind(this);
   }
 
   loggedInUserRows(user) {
@@ -72,7 +73,7 @@ class UserOverlayMenu extends BaseComponent {
     ];
   }
 
-  render() {
+  renderOverlayBody() {
     const { user, config } = this.props;
     const compact = this.state.compact;
     let userBasedRows;
@@ -89,48 +90,54 @@ class UserOverlayMenu extends BaseComponent {
         />);
     }
 
+    return ([
+      userBasedRows,
+      <ButtonRow
+        key='compact-toggle'
+        icon={ 'icon-compact icon-large blue' }
+        text={ `${compact ? 'List' : 'Compact'} view` }
+        clickHandler={ this._viewPreferenceToggleClick }
+      />,
+      <LinkRow
+        key='desktop-toggle'
+        icon={ 'icon-desktop icon-large blue' }
+        text={ 'Desktop Site' }
+        href={ `https://www.reddit.com${this.props.ctx.url}` }
+        clickHandler={ this._desktopSite }
+      />,
+      <ExpandoRow icon='icon-info icon-large' text='About Reddit' key='about'>
+        { menuItems.aboutItems.map((item) => {
+          return (
+              <LinkRow
+                href={ `${config.reddit}${item.url}` }
+                key = { item.url }
+                text={ titleCase(item.title) }
+              />);
+        }) }
+      </ExpandoRow>,
+
+      <ExpandoRow icon='icon-rules icon-large' text='Reddit Rules' key='rules'>
+        { menuItems.ruleItems.map((item) => {
+          return (
+              <LinkRow
+                href={ `${config.reddit}${item.url}` }
+                key={ item.url }
+                text={ titleCase(item.title) }
+              />);
+        }) }
+      </ExpandoRow>,
+    ]);
+  }
+
+  render() {
+    const { app } = this.props;
     return (
       <OverlayMenu
-        app={ this.props.app }
+        app={ app }
         openedOnEventName={ constants.TOP_NAV_HAMBURGER_CLICK }
         firesEventName={ constants.USER_MENU_TOGGLE }
-      >
-        { userBasedRows }
-
-        <ButtonRow
-          icon={ 'icon-compact icon-large blue' }
-          text={ `${compact ? 'List' : 'Compact'} view` }
-          clickHandler={ this._viewPreferenceToggleClick }
-        />
-        <LinkRow
-          icon={ 'icon-desktop icon-large blue' }
-          text={ 'Desktop Site' }
-          href={ `https://www.reddit.com${this.props.ctx.url}` }
-          clickHandler={ this._desktopSite }
-        />
-        <ExpandoRow icon='icon-info icon-large' text='About Reddit'>
-          { menuItems.aboutItems.map((item) => {
-            return (
-                <LinkRow
-                  href={ `${config.reddit}${item.url}` }
-                  key = { item.url }
-                  text={ titleCase(item.title) }
-                />);
-          }) }
-        </ExpandoRow>
-
-        <ExpandoRow icon='icon-rules icon-large' text='Reddit Rules'>
-          { menuItems.ruleItems.map((item) => {
-            return (
-                <LinkRow
-                  href={ `${config.reddit}${item.url}` }
-                  key={ item.url }
-                  text={ titleCase(item.title) }
-                />);
-          }) }
-        </ExpandoRow>
-      </OverlayMenu>
-    );
+        renderChildren={ this.renderOverlayBody }
+      />);
   }
 
   _viewPreferenceToggleClick() {
