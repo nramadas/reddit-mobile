@@ -46,7 +46,7 @@ const _subreddit  = shape({
   community_rules: arrayOf(shape({})),
   hide_ads: bool,
   icon_img: string,
-  icon_size: arrayOf(shape({})),
+  icon_size: arrayOf(number),
   key_color: string,
 
   public_description: string,
