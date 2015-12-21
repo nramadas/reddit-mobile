@@ -15,6 +15,7 @@ class OverlayMenu extends BaseComponent {
 
     this._close = this._close.bind(this);
     this._toggle = this._toggle.bind(this);
+    this._closeIfClickedOut = this._closeIfClickedOut.bind(this);
   }
 
   componentDidMount() {
@@ -67,6 +68,14 @@ class OverlayMenu extends BaseComponent {
       );
     }
     return (<div />);
+  }
+
+  _closeIfClickedOut() {
+    this._close();
+  }
+
+  _gobbleMenuClicks(e) {
+    e.stopPropagation();
   }
 
   static propTypes = {
