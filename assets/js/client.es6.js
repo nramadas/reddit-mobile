@@ -449,10 +449,15 @@ function initialize(bindLinks) {
   });
 
   app.on(constants.OVERLAY_MENU_OPEN, function(open) {
+    // we have to use position:fixed on the body to Prevent
+    // the page from scrolling. to preseve scroll position we
+    // manually fiddle with $body.style.top and scrolltop
     if (open) {
+      $body.style.top = `-${$body.scrollTop}`;
       $body.classList.add('OverlayMenu-visible');
     } else {
       $body.classList.remove('OverlayMenu-visible');
+      $body.scrollTop = -1 * parseInt($body.style.top, 10);
     }
   });
 
