@@ -83,6 +83,11 @@ class CommunityHeader extends BaseComponent {
 
     const banner = this.renderBannerRow(subreddit);
 
+    let keyColorStyle = {};
+    if (subreddit.key_color) {
+      keyColorStyle.color = subreddit.key_color;
+    }
+
     return (
       <div className={ `CommunityHeader ${ error ? 'with-error' : '' }` }>
         { banner }
@@ -97,7 +102,7 @@ class CommunityHeader extends BaseComponent {
           <span>{ `${formatNumber(subreddit.subscribers)} followers` }</span>
           { onlineCount }
           { ` ${UTF8Circle}` }
-          <span className='CommunityHeader-text-row-blue'>
+          <span className='CommunityHeader-text-row-blue' style={ keyColorStyle }>
             { ` ${subscriber ? 'Unfollow' : 'Follow'} ` }
             <button
               className='CommunityHeader-subscribe-button'
@@ -105,6 +110,7 @@ class CommunityHeader extends BaseComponent {
             >
               <span
                 className={ `CommunityHeader-subscribe-icon blue ${ followIcon}` }
+                style={ keyColorStyle }
               />
             </button>
           </span>
