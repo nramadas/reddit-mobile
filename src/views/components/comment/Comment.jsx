@@ -32,6 +32,22 @@ function determineAuthorType(distinguished, author, op, user) {
   return '';
 }
 
+function treeify(comments=[], parentId) {
+  // convert the list into a dict
+  const commentDict = comments.reduce((prev, cur) => ({ ...prev, [cur.name]: cur }), {});
+
+  // build the tree. this relies on references, so mutability is important here
+  comments.forEach(c => {
+    const parent = commentDict[c.parent_id];
+    if (!parent) { return; } // handles top level comments
+    if (!parent.replies) { parent.replies = []; }
+    parent.replies.push(c);
+  });
+
+  // return the top level comments
+  return comments.filter(c => c.parent_id === parentId);
+}
+
 export default class Comment extends BaseComponent {
   static propTypes = {
     comment: T.object.isRequired,
@@ -230,7 +246,7 @@ export default class Comment extends BaseComponent {
         sort: this.props.sort,
       });
 
-      const newComments = response.body;
+      const newComments = treeify(response.body, commentStub.parent_id);
       this.setState({
         commentReplies: without(this.state.commentReplies, commentStub).concat(newComments),
         loadingMoreComments: false,
