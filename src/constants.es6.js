@@ -35,6 +35,7 @@ export default {
   POST_COMPACT_THUMBNAIL_WIDTH: 70,
   POST_DEFAULT_WIDTH: 320,
 
+  /* eslint-disable max-len */
   BANNER_URLS: {
     FRONTPAGE: {
       IMPRESSION: 'https://249639.measurementapi.com/serve?action=impression&publisher_id=249639&site_id=121809&site_id_android=122129&site_id_ios=121809',
@@ -49,6 +50,7 @@ export default {
       CLICK: 'https://249639.measurementapi.com/serve?action=click&publisher_id=249639&site_id=121809&site_id_android=122129&site_id_ios=121809',
     },
   },
+  /* eslint-enable */
 
   // feature flags
   flags: {
