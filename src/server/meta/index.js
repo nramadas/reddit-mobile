@@ -59,36 +59,43 @@ export default (router, apiOptions) => {
   });
 
   router.get('/robots.txt', (ctx) => {
+    // For the initial 2X soft-launch, disallow all crawling.
     ctx.body = `
-      # 80legs
-      User-agent: 008
-      Disallow: /
-
-      # 80legs' new crawler
-      User-agent: voltron
-      Disallow: /
-
-      User-Agent: bender
-      Disallow: /my_shiny_metal_ass
-
-      User-Agent: Gort
-      Disallow: /earth
-
       User-Agent: *
-      Disallow: /*/comments/*?*sort=
-      Disallow: /r/*/comments/*/*/c*
-      Disallow: /comments/*/*/c*
-      Disallow: /*after=
-      Disallow: /*before=
-      Disallow: /login
-      Disallow: /search
-      Disallow: /r/*/search
-      Disallow: /u/*
-      Disallow: /message/*
-      Disallow: /submit*
-      Disallow: /r/*/submit/*
-      Allow: /
+      Disallow: *
     `;
+
+    // when we're ready to ramp up to 100%:
+    // ctx.body = `
+    //   # 80legs
+    //   User-agent: 008
+    //   Disallow: /
+    //
+    //   # 80legs' new crawler
+    //   User-agent: voltron
+    //   Disallow: /
+    //
+    //   User-Agent: bender
+    //   Disallow: /my_shiny_metal_ass
+    //
+    //   User-Agent: Gort
+    //   Disallow: /earth
+    //
+    //   User-Agent: *
+    //   Disallow: /*/comments/*?*sort=
+    //   Disallow: /r/*/comments/*/*/c*
+    //   Disallow: /comments/*/*/c*
+    //   Disallow: /*after=
+    //   Disallow: /*before=
+    //   Disallow: /login
+    //   Disallow: /search
+    //   Disallow: /r/*/search
+    //   Disallow: /u/*
+    //   Disallow: /message/*
+    //   Disallow: /submit*
+    //   Disallow: /r/*/submit/*
+    //   Allow: /
+    // `;
   });
 
   router.post('/error', (ctx) => {
